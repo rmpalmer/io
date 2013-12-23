@@ -1,4 +1,4 @@
-package dscout
+package formats
 
 import (
 
