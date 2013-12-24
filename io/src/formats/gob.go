@@ -13,7 +13,8 @@ type GobMarshaler struct{
 	decoder		*gob.Decoder
 }
 
-func (g *GobMarshaler) InitFile(writer io.Writer) error {
+func (g *GobMarshaler) InitFile(writer io.Writer) error { 
+	fmt.Printf("creating gob encoder for init file\n")
     g.encoder = gob.NewEncoder(writer)
     if err := g.encoder.Encode(magicNumber); err != nil {
         return err
@@ -21,6 +22,7 @@ func (g *GobMarshaler) InitFile(writer io.Writer) error {
     if err := g.encoder.Encode(fileVersion); err != nil {
         return err
     }
+    fmt.Printf("init gob file done\n")
     return nil
 }
 
@@ -49,14 +51,15 @@ func (g *GobMarshaler) ValidateFile(reader io.Reader) (error) {
 }
 
 func (g *GobMarshaler) MarshalTrace(trace *records.Trace) error {
-    fmt.Printf("starting MarshalTrace\n")
+    fmt.Printf("starting gob MarshalTrace\n")
     err := g.encoder.Encode(trace)
     fmt.Printf("done calling encoder.Encode %s\n",err)
+    
     return err
 }
 
 func (g *GobMarshaler) UnmarshalTrace() (*records.Trace, error) {
-    fmt.Printf("starting UnmarshalTrace\n")
+    fmt.Printf("starting gob UnmarshalTrace\n")
     var trace records.Trace
     fmt.Printf("unmarshaller about to decode trace\n")
     err := g.decoder.Decode(&trace)

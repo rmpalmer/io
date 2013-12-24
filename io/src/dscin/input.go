@@ -41,7 +41,6 @@ func (d *Dscin) HandleTrace() *records.Trace {
 	t, err := d.marshaler.UnmarshalTrace()
 	if (err != nil) { 
 		return nil
-	} else {
-		return t
-	}
+	} 
+	return t
 }

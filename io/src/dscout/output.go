@@ -11,7 +11,7 @@ import (
 
 type Dscout struct {
 	closer		func()
-	marshaler	formats.GobMarshaler
+	marshaler	formats.RecordMarshaler
 }
 
 func NewDscout (filename string) *Dscout {
@@ -30,8 +30,16 @@ func NewDscout (filename string) *Dscout {
 		d.closer = func() { compressor.Close(); file.Close() }
 		writer = compressor
 	}
-	d.marshaler = formats.GobMarshaler{}
-	d.marshaler.InitFile(writer)
+	uncompressed_name := strings.TrimRight(filename, ".gz")
+	switch {
+		case strings.HasSuffix(uncompressed_name, ".gob"):
+			d.marshaler = new(formats.GobMarshaler)
+		case strings.HasSuffix(uncompressed_name, ".xml"):
+			d.marshaler = new(formats.XmlMarshaler)
+	}
+	if (d.marshaler != nil) {
+		d.marshaler.InitFile(writer)
+	}
 	return d
 }
 

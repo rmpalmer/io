@@ -9,7 +9,7 @@ import (
 
 func main() {
 	fmt.Printf("io test starting.\n")
-    d := dscout.NewDscout("bar.gz")
+    d := dscout.NewDscout("bar.gob.gz")
     t := records.NewTrace(6,16)
     for i:=0; i<4; i++ {
     	t.Header[i] = i
@@ -23,7 +23,7 @@ func main() {
     }
     d.HandleEod()
     
-    e := dscin.NewDscin("bar.gz")
+    e := dscin.NewDscin("bar.gob.gz")
     for {
     	t = e.HandleTrace()
     	if (t == nil) {
