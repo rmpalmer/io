@@ -13,7 +13,7 @@ type XmlMarshaler struct {
 	decoder *xml.Decoder
 }
 
-func (x XmlMarshaler) InitFile(writer io.Writer) error {
+func (x *XmlMarshaler) InitFile(writer io.Writer) error {
 	x.encoder = xml.NewEncoder(writer)
 	if err := x.encoder.Encode(magicNumber); err != nil {
         return err
@@ -24,7 +24,7 @@ func (x XmlMarshaler) InitFile(writer io.Writer) error {
 	return nil
 }
 
-func (x XmlMarshaler) ValidateFile(reader io.Reader) (error) {
+func (x *XmlMarshaler) ValidateFile(reader io.Reader) (error) {
     x.decoder = xml.NewDecoder(reader)
     var magic int
     if err := x.decoder.Decode(&magic); err != nil {
@@ -48,14 +48,14 @@ func (x XmlMarshaler) ValidateFile(reader io.Reader) (error) {
 	return nil
 }
 
-func (x XmlMarshaler) MarshalTrace(trace *records.Trace) error {
+func (x *XmlMarshaler) MarshalTrace(trace *records.Trace) error {
     fmt.Printf("starting xml MarshalTrace\n")
     err := x.encoder.Encode(trace)
     fmt.Printf("done calling encoder.Encode %s\n",err)
     return err
 }
 
-func (x XmlMarshaler) UnmarshalTrace() (*records.Trace, error) {
+func (x *XmlMarshaler) UnmarshalTrace() (*records.Trace, error) {
     fmt.Printf("starting xml UnmarshalTrace\n")
     var trace records.Trace
     fmt.Printf("unmarshaller about to decode trace\n")
